@@ -24,7 +24,10 @@ print("Creating embeddings and FAISS index...")
 from langchain_huggingface import HuggingFaceEmbeddings
 embeddings = HuggingFaceEmbeddings(
     model_name="sentence-transformers/all-MiniLM-L6-v2",
-    model_kwargs={"device": "cpu"}
+    model_kwargs={"device": "cpu"},           # force CPU
+    encode_kwargs={"normalize_embeddings": True},
+    # ↓↓↓ THIS IS THE MAGIC LINE THAT FIXES THE META TENSOR ERROR ↓↓↓
+    cache_folder="/tmp/hf_cache",             # forces proper download path on HF
 )
 vectorstore = FAISS.from_documents(splits, embeddings)
 vectorstore.save_local("faiss_index")

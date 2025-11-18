@@ -12,7 +12,10 @@ import os
 from langchain_huggingface import HuggingFaceEmbeddings
 embeddings = HuggingFaceEmbeddings(
     model_name="sentence-transformers/all-MiniLM-L6-v2",
-    model_kwargs={"device": "cpu"}
+    model_kwargs={"device": "cpu"},           # force CPU
+    encode_kwargs={"normalize_embeddings": True},
+    # ↓↓↓ THIS IS THE MAGIC LINE THAT FIXES THE META TENSOR ERROR ↓↓↓
+    cache_folder="/tmp/hf_cache",             # forces proper download path on HF
 )
 vectorstore = FAISS.load_local("faiss_index", embeddings, allow_dangerous_deserialization=True)
 retriever = vectorstore.as_retriever(search_kwargs={"k": 6})
