@@ -27,7 +27,11 @@ if not os.path.exists("faiss_index"):
             allow_patterns=["*.faiss", "*.pkl"],
         )
         st.success("Real defense-grade index loaded and cached!")
-vectorstore = FAISS.load_local("faiss_index", embeddings)
+vectorstore = FAISS.load_local(
+    "faiss_index", 
+    embeddings, 
+    allow_dangerous_deserialization=True   # ← REQUIRED for real indexes
+)
 retriever = vectorstore.as_retriever(search_kwargs={"k": 6})
 
 # Prompt template
