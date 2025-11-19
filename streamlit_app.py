@@ -27,6 +27,8 @@ if not os.path.exists("faiss_index"):
             allow_patterns=["*.faiss", "*.pkl"],
         )
         st.success("Real defense-grade index loaded and cached!")
+vectorstore = FAISS.load_local("faiss_index", embeddings)
+retriever = vectorstore.as_retriever(search_kwargs={"k": 6})
 
 # Prompt template
 template = """You are an expert aerospace/defense technical assistant.
