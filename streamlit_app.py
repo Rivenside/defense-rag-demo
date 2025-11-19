@@ -21,7 +21,7 @@ embeddings = HuggingFaceEmbeddings(
 if not os.path.exists("faiss_index"):
     with st.spinner("First launch — downloading real FAISS index from 50+ defense PDFs (30–90 seconds, happens once)..."):
         snapshot_download(
-            repo_id="joe-mckeithen/your-exact-dataset-name-here",   # ← change ONLY this
+            repo_id="Rivenside/faiss-index",
             repo_type="dataset",
             local_dir="faiss_index",
             allow_patterns=["*.faiss", "*.pkl"],
