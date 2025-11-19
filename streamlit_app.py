@@ -60,7 +60,7 @@ chain = (
 # Streamlit UI
 st.set_page_config(page_title="Defense RAG Chatbot", page_icon="✈️")
 st.title("✈️ Defense & Aerospace RAG Chatbot")
-st.caption("Built with LangChain • FAISS • OpenAI • Streamlit | Nov 2025")
+st.caption("Built with LangChain • FAISS • Groq • Streamlit | Nov 2025")
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
