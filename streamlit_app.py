@@ -6,6 +6,7 @@ from langchain_community.vectorstores import FAISS
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
+from huggingface_hub import snapshot_download
 import os
 
 # Load the index
@@ -17,8 +18,15 @@ embeddings = HuggingFaceEmbeddings(
     # ↓↓↓ THIS IS THE MAGIC LINE THAT FIXES THE META TENSOR ERROR ↓↓↓
     cache_folder="/tmp/hf_cache",             # forces proper download path on HF
 )
-vectorstore = FAISS.load_local("faiss_index", embeddings, allow_dangerous_deserialization=True)
-retriever = vectorstore.as_retriever(search_kwargs={"k": 6})
+if not os.path.exists("faiss_index"):
+    with st.spinner("First launch — downloading real FAISS index from 50+ defense PDFs (30–90 seconds, happens once)..."):
+        snapshot_download(
+            repo_id="joe-mckeithen/your-exact-dataset-name-here",   # ← change ONLY this
+            repo_type="dataset",
+            local_dir="faiss_index",
+            allow_patterns=["*.faiss", "*.pkl"],
+        )
+        st.success("Real defense-grade index loaded and cached!")
 
 # Prompt template
 template = """You are an expert aerospace/defense technical assistant.
